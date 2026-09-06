@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Calendario</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        h2 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin: 32px 0 12px 0;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        #saludo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 6px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fff;
+            transition: border-color 0.15s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            background: #6c5ce7;
+            color: white;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        button:hover {
+            background: #5b4bd6;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #444;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e4e4;
+        }
+
+        .amigo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .libre {
+            background: #eafaf1;
+            color: #1e7e4f;
+        }
+
+        .ocupado {
+            background: #fdecec;
+            color: #b3261e;
+        }
+
+        .solicitud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: #fff8e6;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .solicitud button {
+            width: auto;
+            padding: 6px 14px;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        #mi-estado {
+            font-size: 18px;
+            font-weight: 600;
+            padding: 16px;
+        }
+
+        #mensaje-amigo {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        #error-login {
+            color: #b3261e;
+            font-size: 13px;
+        }
+
+        .vacio {
+            color: #aaa;
+            font-size: 14px;
+            padding: 8px 0;
+        }
+
+        #app { display: none; }
+
+        #login-screen {
+            padding-top: 60px;
+            text-align: center;
+        }
+
+        #login-screen h2 {
+            font-size: 22px;
+            text-transform: none;
+            letter-spacing: normal;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2>Bienvenido de nuevo</h2>
+        <input id="login-correo" placeholder="Correo">
+        <input id="login-contrasena" type="password" placeholder="Contraseña">
+        <button onclick="hacerLogin()">Entrar</button>
+        <p id="error-login"></p>
+    </div>
+
+    <div id="app">
+        <div id="saludo"></div>
+
+        <h2>Mi estado</h2>
+        <div id="mi-estado" class="card">Cargando...</div>
+
+        <h2>Solicitudes pendientes</h2>
+        <div id="lista-solicitudes">Cargando...</div>
+
+        <h2>Mis amigos</h2>
+        <div id="lista-amigos">Cargando...</div>
+
+        <h2>Agregar amigo</h2>
+        <div class="card">
+            <input id="correo-amigo" placeholder="Correo del amigo">
+            <button onclick="agregarAmigo()">Enviar solicitud</button>
+            <p id="mensaje-amigo"></p>
+        </div>
+
+        <h2>Crear evento</h2>
+        <div class="card">
+            <input id="titulo" placeholder="Título (ej. Clase de morfología)">
+            <input id="hora_inicio" type="datetime-local">
+            <input id="hora_fin" type="datetime-local">
+            <button onclick="crearEvento()">Guardar evento</button>
+        </div>
+
+        <button class="btn-secondary" onclick="cerrarSesion()" style="margin-top:24px;">Cerrar sesión</button>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+        let MI_ID = null;
+        let MI_NOMBRE = null;
+
+        async function hacerLogin() {
+            const correo = document.getElementById("login-correo").value;
+            const contrasena = document.getElementById("login-contrasena").value;
+            const errorEl = document.getElementById("error-login");
+            errorEl.innerText = "";
+
+            try {
+                const res = await fetch(`${API}/login?correo=${encodeURIComponent(correo)}&contrasena=${encodeURIComponent(contrasena)}`, {
+                    method: "POST"
+                });
+
+                if (!res.ok) {
+                    errorEl.innerText = "Correo o contraseña incorrectos";
+                    return;
+                }
+
+                const data = await res.json();
+                MI_ID = data.usuario_id;
+                MI_NOMBRE = data.nombre;
+
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("app").style.display = "block";
+                document.getElementById("saludo").innerText = "Hola, " + MI_NOMBRE;
+
+                cargarEstado();
+                cargarSolicitudes();
+                cargarAmigos();
+            } catch (e) {
+                errorEl.innerText = "No se pudo conectar con el servidor";
+            }
+        }
+
+        function cerrarSesion() {
+            MI_ID = null;
+            MI_NOMBRE = null;
+            document.getElementById("app").style.display = "none";
+            document.getElementById("login-screen").style.display = "block";
+            document.getElementById("login-correo").value = "";
+            document.getElementById("login-contrasena").value = "";
+        }
+
+        async function cargarEstado() {
+            const res = await fetch(`${API}/usuarios/${MI_ID}/estado`);
+            const data = await res.json();
+            const el = document.getElementById("mi-estado");
+            if (data.estado === "ocupado") {
+                el.innerText = "🔴 Ocupado: " + data.actividad;
+            } else {
+                el.innerText = "🟢 Libre";
+            }
+        }
+
+        async function cargarSolicitudes() {
+            const res = await fetch(`${API}/usuarios/${MI_ID}/solicitudes`);
+            const solicitudes = await res.json();
+            const contenedor = document.getElementById("lista-solicitudes");
+            contenedor.innerHTML = "";
+
+            if (solicitudes.length === 0) {
+                contenedor.innerHTML = '<div class="vacio">No tienes solicitudes pendientes</div>';
+                return;
+            }
+
+            solicitudes.forEach(function(s) {
+                const div = document.createElement("div");
+                div.className = "solicitud";
+                const span = document.createElement("span");
+                span.innerText = s.de_nombre + " te quiere agregar";
+                const boton = document.createElement("button");
+                boton.innerText = "Aceptar";
+                boton.onclick = function() { aceptarSolicitud(s.solicitud_id); };
+                div.appendChild(span);
+                div.appendChild(boton);
+                contenedor.appendChild(div);
+            });
+        }
+
+        async function aceptarSolicitud(solicitudId) {
+            await fetch(`${API}/amistades/${solicitudId}/aceptar`, { method: "PUT" });
+            cargarSolicitudes();
+            cargarAmigos();
+        }
+
+        async function cargarAmigos() {
+            const res = await fetch(`${API}/usuarios/${MI_ID}/amigos`);
+            const amigos = await res.json();
+            const contenedor = document.getElementById("lista-amigos");
+            contenedor.innerHTML = "";
+
+            if (amigos.length === 0) {
+                contenedor.innerHTML = '<div class="vacio">Todavía no tienes amigos agregados</div>';
+                return;
+            }
+
+            amigos.forEach(function(a) {
+                const div = document.createElement("div");
+                div.className = "amigo " + a.estado;
+                const texto = a.estado === "ocupado"
+                    ? (a.nombre + " — Ocupado: " + a.actividad)
+                    : (a.nombre + " — Libre");
+                div.innerText = texto;
+                contenedor.appendChild(div);
+            });
+        }
+
+        async function agregarAmigo() {
+            const correo = document.getElementById("correo-amigo").value;
+            const mensajeEl = document.getElementById("mensaje-amigo");
+            mensajeEl.innerText = "";
+
+            try {
+                const resBuscar = await fetch(`${API}/usuarios/buscar/${encodeURIComponent(correo)}`);
+                if (!resBuscar.ok) {
+                    mensajeEl.innerText = "No se encontró ese usuario";
+                    return;
+                }
+                const amigo = await resBuscar.json();
+
+                const resSolicitud = await fetch(`${API}/amistades`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario_id: MI_ID, amigo_id: amigo.id })
+                });
+
+                if (resSolicitud.ok) {
+                    mensajeEl.innerText = "Solicitud enviada a " + amigo.nombre;
+                    document.getElementById("correo-amigo").value = "";
+                } else {
+                    mensajeEl.innerText = "No se pudo enviar la solicitud";
+                }
+            } catch (e) {
+                mensajeEl.innerText = "Error al buscar el usuario";
+            }
+        }
+
+        async function crearEvento() {
+            const titulo = document.getElementById("titulo").value;
+            const hora_inicio = document.getElementById("hora_inicio").value;
+            const hora_fin = document.getElementById("hora_fin").value;
+
+            await fetch(`${API}/eventos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ usuario_id: MI_ID, titulo: titulo, hora_inicio: hora_inicio, hora_fin: hora_fin })
+            });
+
+            alert("¡Evento creado!");
+            cargarEstado();
+        }
+
+        setInterval(function() {
+            if (MI_ID !== null) {
+                cargarEstado();
+                cargarSolicitudes();
+                cargarAmigos();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
