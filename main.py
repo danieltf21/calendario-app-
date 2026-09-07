@@ -186,3 +186,18 @@ def login(correo: str, contrasena: str, db: Session = Depends(get_db)):
     if not usuario or not verificar_contrasena(contrasena, usuario.contrasena):
         raise HTTPException(status_code=401, detail="Correo o contraseña incorrectos")
     return {"mensaje": "Login exitoso", "usuario_id": usuario.id, "nombre": usuario.nombre}
+@app.get("/usuarios/{usuario_id}/eventos")
+def listar_eventos(usuario_id: int, db: Session = Depends(get_db)):
+    eventos = db.query(Evento).filter(
+        Evento.usuario_id == usuario_id
+    ).order_by(Evento.hora_inicio).all()
+
+    return [
+        {
+            "id": e.id,
+            "titulo": e.titulo,
+            "hora_inicio": e.hora_inicio,
+            "hora_fin": e.hora_fin
+        }
+        for e in eventos
+    ]
