@@ -36,6 +36,3 @@ class Amistad(Base):
     usuario_id = Column(Integer, ForeignKey("usuarios.id"))
     amigo_id = Column(Integer, ForeignKey("usuarios.id"))
     estado = Column(String, default="pendiente")
-
-engine = create_engine("sqlite:///./calendario.db")
-Base.metadata.create_all(bind=engine)

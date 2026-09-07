@@ -24,6 +24,11 @@ class EventoCrear(BaseModel):
     hora_inicio: datetime
     hora_fin: datetime
 
+class EventoActualizar(BaseModel):
+    titulo: str
+    hora_inicio: datetime
+    hora_fin: datetime
+
 class EventoRespuesta(BaseModel):
     id: int
     titulo: str
@@ -37,9 +42,9 @@ class EventoRespuesta(BaseModel):
 class EventoRecurrente(BaseModel):
     usuario_id: int
     titulo: str
-    dia_semana: int  # 0=Lunes ... 6=Domingo
-    hora_inicio: str  # "10:00"
-    hora_fin: str      # "12:00"
+    dia_semana: int
+    hora_inicio: str
+    hora_fin: str
     fecha_inicio: date
     fecha_fin: date
 

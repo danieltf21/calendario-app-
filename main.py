@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -9,7 +10,7 @@ from models import Base, Usuario, Evento, Amistad
 from schemas import (
     UsuarioCrear, UsuarioRespuesta, EventoCrear, EventoRespuesta,
     AmistadCrear, AmistadRespuesta, EventoRecurrente,
-    ActualizarFoto, ActualizarPrivacidad
+    ActualizarFoto, ActualizarPrivacidad, EventoActualizar
 )
 from seguridad import encriptar_contrasena, verificar_contrasena
 
@@ -22,7 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-engine = create_engine("sqlite:///./calendario.db")
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./calendario.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base.metadata.create_all(bind=engine)
 
@@ -100,6 +105,29 @@ def crear_evento(evento: EventoCrear, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(nuevo_evento)
     return nuevo_evento
+
+
+@app.put("/eventos/{evento_id}", response_model=EventoRespuesta)
+def actualizar_evento(evento_id: int, datos: EventoActualizar, db: Session = Depends(get_db)):
+    evento = db.query(Evento).filter(Evento.id == evento_id).first()
+    if not evento:
+        raise HTTPException(status_code=404, detail="Evento no encontrado")
+    evento.titulo = datos.titulo
+    evento.hora_inicio = datos.hora_inicio
+    evento.hora_fin = datos.hora_fin
+    db.commit()
+    db.refresh(evento)
+    return evento
+
+
+@app.delete("/eventos/{evento_id}")
+def borrar_evento(evento_id: int, db: Session = Depends(get_db)):
+    evento = db.query(Evento).filter(Evento.id == evento_id).first()
+    if not evento:
+        raise HTTPException(status_code=404, detail="Evento no encontrado")
+    db.delete(evento)
+    db.commit()
+    return {"mensaje": "Evento eliminado"}
 
 
 @app.post("/eventos/recurrente")
@@ -207,6 +235,19 @@ def listar_amigos(usuario_id: int, db: Session = Depends(get_db)):
         })
 
     return resultado
+
+
+@app.delete("/usuarios/{usuario_id}/amigos/{amigo_id}")
+def quitar_amigo(usuario_id: int, amigo_id: int, db: Session = Depends(get_db)):
+    amistad = db.query(Amistad).filter(
+        Amistad.usuario_id == usuario_id,
+        Amistad.amigo_id == amigo_id
+    ).first()
+    if not amistad:
+        raise HTTPException(status_code=404, detail="Amistad no encontrada")
+    db.delete(amistad)
+    db.commit()
+    return {"mensaje": "Amigo eliminado"}
 
 
 @app.post("/login")

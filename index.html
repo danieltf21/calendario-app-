@@ -5,340 +5,91 @@
     <title>Mi Calendario</title>
     <style>
         * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #fafafa;
-            color: #1a1a1a;
-            margin: 0;
-            padding: 0;
-        }
-
-        #login-screen {
-            max-width: 380px;
-            margin: 80px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #fafafa; color: #1a1a1a; margin: 0; padding: 0; }
+        #login-screen { max-width: 380px; margin: 80px auto; padding: 0 20px; text-align: center; }
         #login-screen h2 { font-size: 22px; margin-bottom: 24px; }
-
-        input {
-            width: 100%;
-            padding: 12px 14px;
-            margin: 6px 0;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-        }
-
+        input { width: 100%; padding: 12px 14px; margin: 6px 0; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; }
         input:focus { outline: none; border-color: #6c5ce7; }
-
-        select {
-            width: 100%;
-            padding: 12px 14px;
-            margin: 6px 0;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            background: #fff;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin: 6px 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            background: #6c5ce7;
-            color: white;
-            cursor: pointer;
-        }
-
+        select { width: 100%; padding: 12px 14px; margin: 6px 0; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; background: #fff; }
+        button { width: 100%; padding: 12px; margin: 6px 0; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; background: #6c5ce7; color: white; cursor: pointer; }
         button:hover { background: #5b4bd6; }
         .btn-secondary { background: #f0f0f0; color: #444; }
         .btn-secondary:hover { background: #e4e4e4; }
+        .btn-peligro { background: #fdecec; color: #b3261e; }
+        .btn-peligro:hover { background: #fadbdb; }
         #error-login { color: #b3261e; font-size: 13px; }
-
         #app { display: none; max-width: 520px; margin: 0 auto; padding: 0 0 40px 0; }
-
-        .topbar {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 14px 20px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-
+        .topbar { display: flex; flex-direction: column; gap: 10px; padding: 14px 20px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 5; }
         .topbar-fila1 { display: flex; align-items: center; justify-content: space-between; }
-
-        #btn-menu {
-            width: auto;
-            background: none;
-            color: #333;
-            font-size: 22px;
-            padding: 4px 8px;
-            margin: 0;
-        }
-
+        #btn-menu { width: auto; background: none; color: #333; font-size: 22px; padding: 4px 8px; margin: 0; }
         #btn-menu:hover { background: #f0f0f0; }
-
         .date-nav { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
-
-        .date-nav button {
-            width: auto;
-            background: none;
-            color: #6c5ce7;
-            font-size: 18px;
-            padding: 2px 8px;
-            margin: 0;
-        }
-
+        .date-nav button { width: auto; background: none; color: #6c5ce7; font-size: 18px; padding: 2px 8px; margin: 0; }
         .date-nav button:hover { background: #f0f0f0; }
-
         #btn-hoy { width: auto; font-size: 13px; padding: 6px 12px; margin: 0; }
-
         .selector-vista { display: flex; background: #f0f0f0; border-radius: 10px; padding: 3px; }
-
-        .selector-vista button {
-            flex: 1;
-            background: none;
-            color: #666;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 6px 4px;
-            margin: 0;
-            border-radius: 8px;
-        }
-
+        .selector-vista button { flex: 1; background: none; color: #666; font-size: 12px; font-weight: 600; padding: 6px 4px; margin: 0; border-radius: 8px; }
         .selector-vista button.activo { background: #fff; color: #6c5ce7; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-
         #contenido { padding: 20px; }
-
-        .evento-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .evento-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee; }
         .evento-hora { font-size: 13px; font-weight: 600; color: #6c5ce7; min-width: 48px; }
-        .evento-titulo { font-size: 15px; font-weight: 500; }
+        .evento-titulo { font-size: 15px; font-weight: 500; flex: 1; }
+        .evento-acciones { display: flex; gap: 4px; }
+        .evento-acciones button { width: auto; padding: 4px 8px; font-size: 13px; margin: 0; background: none; color: #999; }
+        .evento-acciones button:hover { background: #f0f0f0; color: #333; }
         .vacio { color: #aaa; font-size: 14px; padding: 20px 0; text-align: center; }
-
-        .card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            border: 1px solid #eee;
-            margin-top: 20px;
-        }
-
-        .card h2 {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #888;
-            margin: 0 0 12px 0;
-        }
-
+        .card { background: #ffffff; border-radius: 14px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eee; margin-top: 20px; }
+        .card h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin: 0 0 12px 0; }
         .semana-dia { margin-bottom: 18px; }
         .semana-dia-header { font-size: 13px; font-weight: 700; color: #6c5ce7; margin-bottom: 8px; text-transform: capitalize; }
         .semana-dia-header.hoy { color: #b3261e; }
-
         .mes-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
         .mes-diasemana { text-align: center; font-size: 11px; font-weight: 600; color: #999; padding-bottom: 6px; }
-
-        .mes-celda {
-            aspect-ratio: 1;
-            padding: 4px 6px;
-            border-radius: 8px;
-            background: #fff;
-            border: 1px solid #eee;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        .mes-celda { aspect-ratio: 1; padding: 4px 6px; border-radius: 8px; background: #fff; border: 1px solid #eee; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
         .mes-celda:hover { background: #f7f5fe; }
         .mes-celda.otro-mes { opacity: 0.35; }
         .mes-celda.hoy { border-color: #6c5ce7; border-width: 2px; }
         .mes-num { font-weight: 600; }
         .mes-punto { width: 6px; height: 6px; border-radius: 50%; background: #6c5ce7; margin-top: 4px; }
-
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        #menu-lateral {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100%;
-            background: #fff;
-            box-shadow: -2px 0 12px rgba(0,0,0,0.1);
-            z-index: 20;
-            transition: right 0.25s ease;
-            padding: 24px 20px;
-            overflow-y: auto;
-        }
-
+        #overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 10; }
+        #menu-lateral { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #fff; box-shadow: -2px 0 12px rgba(0,0,0,0.1); z-index: 20; transition: right 0.25s ease; padding: 24px 20px; overflow-y: auto; }
         #menu-lateral.abierto { right: 0; }
-
         .perfil-header { text-align: center; margin-bottom: 8px; }
-
-        .avatar-wrap {
-            position: relative;
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 8px auto;
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #ccc;
-            display: block;
-            background: #ddd;
-        }
-
-        .avatar-inicial {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 4px solid #ccc;
-            background: #6c5ce7;
-            color: white;
-            font-size: 26px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .avatar-wrap { position: relative; width: 72px; height: 72px; margin: 0 auto 8px auto; cursor: pointer; }
+        .avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 4px solid #ccc; display: block; background: #ddd; }
+        .avatar-inicial { width: 72px; height: 72px; border-radius: 50%; border: 4px solid #ccc; background: #6c5ce7; color: white; font-size: 26px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
         .avatar.libre, .avatar-inicial.libre { border-color: #2ecc71; }
         .avatar.ocupado, .avatar-inicial.ocupado { border-color: #e74c3c; }
-
-        .avatar-editar {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            background: #6c5ce7;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            border: 2px solid #fff;
-        }
-
+        .avatar-editar { position: absolute; bottom: -2px; right: -2px; background: #6c5ce7; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 2px solid #fff; }
         #nombre-perfil { font-weight: 700; font-size: 16px; }
         #texto-estado-menu { font-size: 13px; color: #666; margin-top: 2px; }
-
-        .toggle-privacidad {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #444;
-            margin-top: 14px;
-        }
-
+        .toggle-privacidad { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #444; margin-top: 14px; }
         .toggle-privacidad input { width: auto; margin: 0; }
-
-        .menu-item {
-            text-align: left;
-            background: none;
-            color: #333;
-            font-weight: 500;
-            padding: 12px 10px;
-            border-radius: 8px;
-        }
-
+        .menu-item { text-align: left; background: none; color: #333; font-weight: 500; padding: 12px 10px; border-radius: 8px; }
         .menu-item:hover, .menu-item.activo { background: #f0edfe; color: #6c5ce7; }
-
         .seccion-menu { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee; }
         .seccion-menu.visible { display: block; }
-
-        .amigo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            margin: 6px 0;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            background: #f7f7f7;
-        }
-
-        .avatar-mini {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #ccc;
-            flex-shrink: 0;
-        }
-
-        .avatar-mini-inicial {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 3px solid #ccc;
-            background: #6c5ce7;
-            color: white;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
+        .amigo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; margin: 6px 0; border-radius: 10px; font-size: 13px; font-weight: 500; background: #f7f7f7; }
+        .amigo span { flex: 1; }
+        .amigo .btn-quitar { width: auto; padding: 3px 8px; font-size: 11px; margin: 0; background: #fdecec; color: #b3261e; }
+        .avatar-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 3px solid #ccc; flex-shrink: 0; }
+        .avatar-mini-inicial { width: 32px; height: 32px; border-radius: 50%; border: 3px solid #ccc; background: #6c5ce7; color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .avatar-mini.libre, .avatar-mini-inicial.libre { border-color: #2ecc71; }
         .avatar-mini.ocupado, .avatar-mini-inicial.ocupado { border-color: #e74c3c; }
-
-        .solicitud {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-            margin: 6px 0;
-            background: #fff8e6;
-            border-radius: 10px;
-            font-size: 13px;
-        }
-
+        .solicitud { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; margin: 6px 0; background: #fff8e6; border-radius: 10px; font-size: 13px; }
         .solicitud button { width: auto; padding: 5px 12px; font-size: 12px; margin: 0; }
         #mensaje-amigo { font-size: 12px; color: #666; margin-top: 4px; }
-
-        .checkbox-recurrente {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
+        .checkbox-recurrente { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; }
         .checkbox-recurrente input { width: auto; margin: 0; }
-
         #campos-recurrente { display: none; }
+        #resultados-busqueda { margin-top: 10px; }
+        .resultado-busqueda { padding: 8px 10px; margin: 4px 0; background: #f7f7f7; border-radius: 8px; font-size: 13px; cursor: pointer; }
+        .resultado-busqueda:hover { background: #f0edfe; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 30; align-items: center; justify-content: center; }
+        .modal-overlay.visible { display: flex; }
+        .modal-caja { background: #fff; border-radius: 14px; padding: 20px; width: 90%; max-width: 360px; }
+        .modal-caja h3 { margin: 0 0 14px 0; font-size: 16px; }
+        .modal-botones { display: flex; gap: 8px; }
     </style>
 </head>
 <body>
@@ -374,7 +125,6 @@
 
             <div class="card">
                 <h2>Nuevo evento</h2>
-
                 <div class="checkbox-recurrente">
                     <input type="checkbox" id="es-recurrente" onchange="toggleRecurrente()">
                     <label for="es-recurrente">Este evento se repite semanalmente</label>
@@ -426,6 +176,7 @@
 
         <button class="menu-item" onclick="mostrarSeccion('amigos')">👥 Amigos</button>
         <button class="menu-item" onclick="mostrarSeccion('agregar')">➕ Agregar amigo</button>
+        <button class="menu-item" onclick="mostrarSeccion('buscar')">🔍 Buscar evento</button>
         <button class="menu-item" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
 
         <div id="seccion-amigos" class="seccion-menu">
@@ -440,6 +191,24 @@
             <button onclick="agregarAmigo()">Enviar solicitud</button>
             <p id="mensaje-amigo"></p>
         </div>
+
+        <div id="seccion-buscar" class="seccion-menu">
+            <input id="input-busqueda" placeholder="Buscar por título..." oninput="buscarEventos()">
+            <div id="resultados-busqueda"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-editar">
+        <div class="modal-caja">
+            <h3>Editar evento</h3>
+            <input id="editar-titulo" placeholder="Título">
+            <input id="editar-hora-inicio" type="datetime-local">
+            <input id="editar-hora-fin" type="datetime-local">
+            <div class="modal-botones">
+                <button class="btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                <button onclick="guardarEdicion()">Guardar</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -452,35 +221,30 @@
         let fechaSeleccionada = new Date();
         let vistaActual = "dia";
         let todosLosEventos = [];
+        let eventoEditandoId = null;
 
         async function hacerLogin() {
             const correo = document.getElementById("login-correo").value;
             const contrasena = document.getElementById("login-contrasena").value;
             const errorEl = document.getElementById("error-login");
             errorEl.innerText = "";
-
             try {
                 const res = await fetch(`${API}/login?correo=${encodeURIComponent(correo)}&contrasena=${encodeURIComponent(contrasena)}`, { method: "POST" });
                 if (!res.ok) { errorEl.innerText = "Correo o contraseña incorrectos"; return; }
-
                 const data = await res.json();
                 MI_ID = data.usuario_id;
                 MI_NOMBRE = data.nombre;
                 MI_FOTO = data.foto_perfil;
                 MI_MOSTRAR_ACTIVIDAD = data.mostrar_actividad;
-
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("app").style.display = "block";
                 document.getElementById("nombre-perfil").innerText = MI_NOMBRE;
                 document.getElementById("chk-privacidad").checked = MI_MOSTRAR_ACTIVIDAD;
-
                 cargarEventos();
                 cargarEstadoMenu();
                 cargarSolicitudes();
                 cargarAmigos();
-            } catch (e) {
-                errorEl.innerText = "No se pudo conectar con el servidor";
-            }
+            } catch (e) { errorEl.innerText = "No se pudo conectar con el servidor"; }
         }
 
         function cerrarSesion() {
@@ -526,13 +290,11 @@
         async function subirFoto(event) {
             const archivo = event.target.files[0];
             if (!archivo) return;
-
             const lector = new FileReader();
             lector.onload = async function() {
                 const base64 = lector.result;
                 await fetch(`${API}/usuarios/${MI_ID}/foto`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    method: "PUT", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ foto_base64: base64 })
                 });
                 MI_FOTO = base64;
@@ -544,16 +306,13 @@
         async function actualizarPrivacidad() {
             const nuevoValor = document.getElementById("chk-privacidad").checked;
             await fetch(`${API}/usuarios/${MI_ID}/privacidad`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                method: "PUT", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ mostrar_actividad: nuevoValor })
             });
             MI_MOSTRAR_ACTIVIDAD = nuevoValor;
         }
 
-        function mismoDia(a, b) {
-            return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-        }
+        function mismoDia(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 
         function inicioDeSemana(fecha) {
             const d = new Date(fecha);
@@ -576,10 +335,7 @@
             renderizarVista();
         }
 
-        function irHoy() {
-            fechaSeleccionada = new Date();
-            renderizarVista();
-        }
+        function irHoy() { fechaSeleccionada = new Date(); renderizarVista(); }
 
         function toggleRecurrente() {
             const marcado = document.getElementById("es-recurrente").checked;
@@ -634,7 +390,11 @@
             const div = document.createElement("div");
             div.className = "evento-item";
             div.innerHTML = `<div class="evento-hora">${inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
-                              <div class="evento-titulo">${e.titulo}<br><span style="font-size:12px; color:#999; font-weight:400;">${horaTexto}</span></div>`;
+                              <div class="evento-titulo">${e.titulo}<br><span style="font-size:12px; color:#999; font-weight:400;">${horaTexto}</span></div>
+                              <div class="evento-acciones">
+                                <button onclick="abrirModalEditar(${e.id})">✎</button>
+                                <button onclick="borrarEvento(${e.id})">🗑</button>
+                              </div>`;
             return div;
         }
 
@@ -643,25 +403,19 @@
             contenedor.innerHTML = "";
             const inicio = inicioDeSemana(fechaSeleccionada);
             const hoy = new Date();
-
             for (let i = 0; i < 7; i++) {
                 const dia = new Date(inicio);
                 dia.setDate(dia.getDate() + i);
                 const eventos = eventosDe(dia);
-
                 const bloque = document.createElement("div");
                 bloque.className = "semana-dia";
-
                 const header = document.createElement("div");
                 header.className = "semana-dia-header" + (mismoDia(dia, hoy) ? " hoy" : "");
                 header.innerText = dia.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' });
                 bloque.appendChild(header);
-
                 if (eventos.length === 0) {
                     const vacio = document.createElement("div");
-                    vacio.className = "vacio";
-                    vacio.style.textAlign = "left";
-                    vacio.style.padding = "0 0 4px 0";
+                    vacio.className = "vacio"; vacio.style.textAlign = "left"; vacio.style.padding = "0 0 4px 0";
                     vacio.innerText = "Sin eventos";
                     bloque.appendChild(vacio);
                 } else {
@@ -680,46 +434,67 @@
             const inicioGrid = new Date(primerDiaMes);
             inicioGrid.setDate(inicioGrid.getDate() - inicioGrid.getDay());
             const hoy = new Date();
-
             const grid = document.createElement("div");
             grid.className = "mes-grid";
-
             ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"].forEach(function(d) {
-                const cab = document.createElement("div");
-                cab.className = "mes-diasemana";
-                cab.innerText = d;
+                const cab = document.createElement("div"); cab.className = "mes-diasemana"; cab.innerText = d;
                 grid.appendChild(cab);
             });
-
             for (let i = 0; i < 42; i++) {
                 const dia = new Date(inicioGrid);
                 dia.setDate(dia.getDate() + i);
                 const eventos = eventosDe(dia);
-
                 const celda = document.createElement("div");
                 celda.className = "mes-celda";
                 if (dia.getMonth() !== mes) celda.classList.add("otro-mes");
                 if (mismoDia(dia, hoy)) celda.classList.add("hoy");
-
-                const num = document.createElement("div");
-                num.className = "mes-num";
-                num.innerText = dia.getDate();
+                const num = document.createElement("div"); num.className = "mes-num"; num.innerText = dia.getDate();
                 celda.appendChild(num);
-
                 if (eventos.length > 0) {
-                    const punto = document.createElement("div");
-                    punto.className = "mes-punto";
+                    const punto = document.createElement("div"); punto.className = "mes-punto";
                     celda.appendChild(punto);
                 }
-
-                celda.onclick = function() {
-                    fechaSeleccionada = new Date(dia);
-                    cambiarVista("dia");
-                };
-
+                celda.onclick = function() { fechaSeleccionada = new Date(dia); cambiarVista("dia"); };
                 grid.appendChild(celda);
             }
             contenedor.appendChild(grid);
+        }
+
+        function abrirModalEditar(id) {
+            const evento = todosLosEventos.find(function(e) { return e.id === id; });
+            if (!evento) return;
+            eventoEditandoId = id;
+            document.getElementById("editar-titulo").value = evento.titulo;
+            document.getElementById("editar-hora-inicio").value = evento.hora_inicio.slice(0,16);
+            document.getElementById("editar-hora-fin").value = evento.hora_fin.slice(0,16);
+            document.getElementById("modal-editar").classList.add("visible");
+        }
+
+        function cerrarModalEditar() {
+            document.getElementById("modal-editar").classList.remove("visible");
+            eventoEditandoId = null;
+        }
+
+        async function guardarEdicion() {
+            const titulo = document.getElementById("editar-titulo").value;
+            const hora_inicio = document.getElementById("editar-hora-inicio").value;
+            const hora_fin = document.getElementById("editar-hora-fin").value;
+
+            await fetch(`${API}/eventos/${eventoEditandoId}`, {
+                method: "PUT", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ titulo: titulo, hora_inicio: hora_inicio, hora_fin: hora_fin })
+            });
+
+            cerrarModalEditar();
+            cargarEventos();
+            cargarEstadoMenu();
+        }
+
+        async function borrarEvento(id) {
+            if (!confirm("¿Seguro que quieres borrar este evento?")) return;
+            await fetch(`${API}/eventos/${id}`, { method: "DELETE" });
+            cargarEventos();
+            cargarEstadoMenu();
         }
 
         async function cargarEstadoMenu() {
@@ -740,13 +515,10 @@
             solicitudes.forEach(function(s) {
                 const div = document.createElement("div");
                 div.className = "solicitud";
-                const span = document.createElement("span");
-                span.innerText = s.de_nombre;
-                const boton = document.createElement("button");
-                boton.innerText = "Aceptar";
+                const span = document.createElement("span"); span.innerText = s.de_nombre;
+                const boton = document.createElement("button"); boton.innerText = "Aceptar";
                 boton.onclick = function() { aceptarSolicitud(s.solicitud_id); };
-                div.appendChild(span);
-                div.appendChild(boton);
+                div.appendChild(span); div.appendChild(boton);
                 contenedor.appendChild(div);
             });
         }
@@ -763,25 +535,24 @@
             const contenedor = document.getElementById("lista-amigos");
             contenedor.innerHTML = "";
             if (amigos.length === 0) { contenedor.innerHTML = '<div class="vacio">Sin amigos todavía</div>'; return; }
-
             amigos.forEach(function(a) {
                 const div = document.createElement("div");
                 div.className = "amigo";
-
                 let avatarHtml;
-                if (a.foto_perfil) {
-                    avatarHtml = `<img class="avatar-mini ${a.estado}" src="${a.foto_perfil}">`;
-                } else {
-                    avatarHtml = `<div class="avatar-mini-inicial ${a.estado}">${a.nombre.charAt(0).toUpperCase()}</div>`;
-                }
-
+                if (a.foto_perfil) { avatarHtml = `<img class="avatar-mini ${a.estado}" src="${a.foto_perfil}">`; }
+                else { avatarHtml = `<div class="avatar-mini-inicial ${a.estado}">${a.nombre.charAt(0).toUpperCase()}</div>`; }
                 const texto = a.estado === "ocupado"
                     ? (a.actividad ? (a.nombre + " — Ocupado: " + a.actividad) : (a.nombre + " — Ocupado"))
                     : (a.nombre + " — Libre");
-
-                div.innerHTML = avatarHtml + `<span>${texto}</span>`;
+                div.innerHTML = avatarHtml + `<span>${texto}</span><button class="btn-quitar" onclick="quitarAmigo(${a.amigo_id})">Quitar</button>`;
                 contenedor.appendChild(div);
             });
+        }
+
+        async function quitarAmigo(amigoId) {
+            if (!confirm("¿Quitar a este amigo de tu lista?")) return;
+            await fetch(`${API}/usuarios/${MI_ID}/amigos/${amigoId}`, { method: "DELETE" });
+            cargarAmigos();
         }
 
         async function agregarAmigo() {
@@ -793,15 +564,46 @@
                 if (!resBuscar.ok) { mensajeEl.innerText = "No se encontró ese usuario"; return; }
                 const amigo = await resBuscar.json();
                 const resSolicitud = await fetch(`${API}/amistades`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ usuario_id: MI_ID, amigo_id: amigo.id })
                 });
-                if (resSolicitud.ok) {
-                    mensajeEl.innerText = "Solicitud enviada a " + amigo.nombre;
-                    document.getElementById("correo-amigo").value = "";
-                } else { mensajeEl.innerText = "No se pudo enviar la solicitud"; }
+                if (resSolicitud.ok) { mensajeEl.innerText = "Solicitud enviada a " + amigo.nombre; document.getElementById("correo-amigo").value = ""; }
+                else { mensajeEl.innerText = "No se pudo enviar la solicitud"; }
             } catch (e) { mensajeEl.innerText = "Error al buscar el usuario"; }
+        }
+
+        function buscarEventos() {
+            const query = document.getElementById("input-busqueda").value.toLowerCase().trim();
+            const contenedor = document.getElementById("resultados-busqueda");
+            contenedor.innerHTML = "";
+            if (query.length === 0) return;
+
+            const resultados = todosLosEventos.filter(function(e) { return e.titulo.toLowerCase().includes(query); })
+                .sort(function(a, b) { return new Date(a.hora_inicio) - new Date(b.hora_inicio); });
+
+            if (resultados.length === 0) { contenedor.innerHTML = '<div class="vacio">Sin resultados</div>'; return; }
+
+            resultados.forEach(function(e) {
+                const inicio = new Date(e.hora_inicio);
+                const div = document.createElement("div");
+                div.className = "resultado-busqueda";
+                div.innerText = e.titulo + " — " + inicio.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) +
+                    " " + inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                div.onclick = function() {
+                    fechaSeleccionada = new Date(inicio);
+                    cambiarVista("dia");
+                    toggleMenu(false);
+                };
+                contenedor.appendChild(div);
+            });
+        }
+
+        function hayConflicto(inicioNuevo, finNuevo) {
+            return todosLosEventos.some(function(e) {
+                const ei = new Date(e.hora_inicio);
+                const ef = new Date(e.hora_fin);
+                return inicioNuevo < ef && finNuevo > ei;
+            });
         }
 
         async function guardarEvento() {
@@ -812,9 +614,16 @@
                 const hora_inicio = document.getElementById("hora_inicio").value;
                 const hora_fin = document.getElementById("hora_fin").value;
 
+                if (hora_inicio && hora_fin) {
+                    const inicioDate = new Date(hora_inicio);
+                    const finDate = new Date(hora_fin);
+                    if (hayConflicto(inicioDate, finDate)) {
+                        if (!confirm("Este horario se cruza con otro evento que ya tienes. ¿Guardarlo igual?")) return;
+                    }
+                }
+
                 await fetch(`${API}/eventos`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ usuario_id: MI_ID, titulo: titulo, hora_inicio: hora_inicio, hora_fin: hora_fin })
                 });
 
@@ -830,8 +639,7 @@
                 const fecha_fin = document.getElementById("fecha-fin-r").value;
 
                 await fetch(`${API}/eventos/recurrente`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         usuario_id: MI_ID, titulo: titulo, dia_semana: dia_semana,
                         hora_inicio: hora_inicio, hora_fin: hora_fin,
