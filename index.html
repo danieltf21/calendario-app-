@@ -21,10 +21,7 @@
             text-align: center;
         }
 
-        #login-screen h2 {
-            font-size: 22px;
-            margin-bottom: 24px;
-        }
+        #login-screen h2 { font-size: 22px; margin-bottom: 24px; }
 
         input {
             width: 100%;
@@ -51,23 +48,28 @@
         }
 
         button:hover { background: #5b4bd6; }
-
         .btn-secondary { background: #f0f0f0; color: #444; }
         .btn-secondary:hover { background: #e4e4e4; }
-
         #error-login { color: #b3261e; font-size: 13px; }
 
-        #app { display: none; max-width: 480px; margin: 0 auto; padding: 0 0 40px 0; }
+        #app { display: none; max-width: 520px; margin: 0 auto; padding: 0 0 40px 0; }
 
         .topbar {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px 20px;
             background: #fff;
             border-bottom: 1px solid #eee;
             position: sticky;
             top: 0;
+            z-index: 5;
+        }
+
+        .topbar-fila1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         #btn-menu {
@@ -84,9 +86,9 @@
         .date-nav {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .date-nav button {
@@ -94,22 +96,39 @@
             background: none;
             color: #6c5ce7;
             font-size: 18px;
-            padding: 2px 10px;
+            padding: 2px 8px;
             margin: 0;
         }
 
         .date-nav button:hover { background: #f0f0f0; }
 
-        #btn-hoy {
-            width: auto;
-            font-size: 13px;
-            padding: 6px 12px;
-            margin: 0;
+        #btn-hoy { width: auto; font-size: 13px; padding: 6px 12px; margin: 0; }
+
+        .selector-vista {
+            display: flex;
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 3px;
         }
 
-        #contenido {
-            padding: 20px;
+        .selector-vista button {
+            flex: 1;
+            background: none;
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 4px;
+            margin: 0;
+            border-radius: 8px;
         }
+
+        .selector-vista button.activo {
+            background: #fff;
+            color: #6c5ce7;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        #contenido { padding: 20px; }
 
         .evento-item {
             display: flex;
@@ -125,17 +144,9 @@
             min-width: 48px;
         }
 
-        .evento-titulo {
-            font-size: 15px;
-            font-weight: 500;
-        }
+        .evento-titulo { font-size: 15px; font-weight: 500; }
 
-        .vacio {
-            color: #aaa;
-            font-size: 14px;
-            padding: 20px 0;
-            text-align: center;
-        }
+        .vacio { color: #aaa; font-size: 14px; padding: 20px 0; text-align: center; }
 
         .card {
             background: #ffffff;
@@ -153,6 +164,61 @@
             letter-spacing: 0.05em;
             color: #888;
             margin: 0 0 12px 0;
+        }
+
+        /* Vista semana */
+        .semana-dia { margin-bottom: 18px; }
+
+        .semana-dia-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6c5ce7;
+            margin-bottom: 8px;
+            text-transform: capitalize;
+        }
+
+        .semana-dia-header.hoy { color: #b3261e; }
+
+        /* Vista mes */
+        .mes-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .mes-diasemana {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            padding-bottom: 6px;
+        }
+
+        .mes-celda {
+            aspect-ratio: 1;
+            padding: 4px 6px;
+            border-radius: 8px;
+            background: #fff;
+            border: 1px solid #eee;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mes-celda:hover { background: #f7f5fe; }
+        .mes-celda.otro-mes { opacity: 0.35; }
+        .mes-celda.hoy { border-color: #6c5ce7; border-width: 2px; }
+
+        .mes-num { font-weight: 600; }
+
+        .mes-punto {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #6c5ce7;
+            margin-top: 4px;
         }
 
         /* Menú lateral */
@@ -233,13 +299,7 @@
             font-size: 13px;
         }
 
-        .solicitud button {
-            width: auto;
-            padding: 5px 12px;
-            font-size: 12px;
-            margin: 0;
-        }
-
+        .solicitud button { width: auto; padding: 5px 12px; font-size: 12px; margin: 0; }
         #mensaje-amigo { font-size: 12px; color: #666; margin-top: 4px; }
     </style>
 </head>
@@ -255,17 +315,24 @@
 
     <div id="app">
         <div class="topbar">
-            <button id="btn-menu" onclick="toggleMenu()">☰</button>
-            <div class="date-nav">
-                <button onclick="cambiarDia(-1)">‹</button>
-                <span id="fecha-actual"></span>
-                <button onclick="cambiarDia(1)">›</button>
+            <div class="topbar-fila1">
+                <button id="btn-menu" onclick="toggleMenu()">☰</button>
+                <div class="date-nav">
+                    <button onclick="cambiarPeriodo(-1)">‹</button>
+                    <span id="fecha-actual"></span>
+                    <button onclick="cambiarPeriodo(1)">›</button>
+                </div>
+                <button id="btn-hoy" class="btn-secondary" onclick="irHoy()">Hoy</button>
             </div>
-            <button id="btn-hoy" class="btn-secondary" onclick="irHoy()">Hoy</button>
+            <div class="selector-vista">
+                <button id="btn-vista-dia" class="activo" onclick="cambiarVista('dia')">Día</button>
+                <button id="btn-vista-semana" onclick="cambiarVista('semana')">Semana</button>
+                <button id="btn-vista-mes" onclick="cambiarVista('mes')">Mes</button>
+            </div>
         </div>
 
         <div id="contenido">
-            <div id="lista-eventos-dia">Cargando...</div>
+            <div id="vista-eventos">Cargando...</div>
 
             <div class="card">
                 <h2>Nuevo evento</h2>
@@ -309,6 +376,7 @@
         let MI_ID = null;
         let MI_NOMBRE = null;
         let fechaSeleccionada = new Date();
+        let vistaActual = "dia";
         let todosLosEventos = [];
 
         async function hacerLogin() {
@@ -335,7 +403,6 @@
                 document.getElementById("app").style.display = "block";
                 document.getElementById("saludo-menu").innerText = "Hola, " + MI_NOMBRE;
 
-                actualizarFechaMostrada();
                 cargarEventos();
                 cargarEstadoMenu();
                 cargarSolicitudes();
@@ -359,14 +426,8 @@
             const menu = document.getElementById("menu-lateral");
             const overlay = document.getElementById("overlay");
             const abrir = forzar !== undefined ? forzar : !menu.classList.contains("abierto");
-
-            if (abrir) {
-                menu.classList.add("abierto");
-                overlay.style.display = "block";
-            } else {
-                menu.classList.remove("abierto");
-                overlay.style.display = "none";
-            }
+            if (abrir) { menu.classList.add("abierto"); overlay.style.display = "block"; }
+            else { menu.classList.remove("abierto"); overlay.style.display = "none"; }
         }
 
         function mostrarSeccion(nombre) {
@@ -376,66 +437,179 @@
             event.currentTarget.classList.add("activo");
         }
 
-        function formatoFecha(fecha) {
-            const opciones = { weekday: 'short', day: 'numeric', month: 'short' };
-            return fecha.toLocaleDateString('es-ES', opciones);
+        function mismoDia(a, b) {
+            return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
         }
 
-        function mismoDia(fechaEvento, fechaComparar) {
-            return fechaEvento.getFullYear() === fechaComparar.getFullYear() &&
-                   fechaEvento.getMonth() === fechaComparar.getMonth() &&
-                   fechaEvento.getDate() === fechaComparar.getDate();
+        function inicioDeSemana(fecha) {
+            const d = new Date(fecha);
+            d.setDate(d.getDate() - d.getDay());
+            d.setHours(0,0,0,0);
+            return d;
         }
 
-        function actualizarFechaMostrada() {
-            document.getElementById("fecha-actual").innerText = formatoFecha(fechaSeleccionada);
+        function cambiarVista(nueva) {
+            vistaActual = nueva;
+            document.querySelectorAll(".selector-vista button").forEach(function(b) { b.classList.remove("activo"); });
+            document.getElementById("btn-vista-" + nueva).classList.add("activo");
+            renderizarVista();
         }
 
-        function cambiarDia(delta) {
-            fechaSeleccionada.setDate(fechaSeleccionada.getDate() + delta);
-            actualizarFechaMostrada();
-            renderizarEventosDelDia();
+        function cambiarPeriodo(delta) {
+            if (vistaActual === "dia") fechaSeleccionada.setDate(fechaSeleccionada.getDate() + delta);
+            else if (vistaActual === "semana") fechaSeleccionada.setDate(fechaSeleccionada.getDate() + delta * 7);
+            else if (vistaActual === "mes") fechaSeleccionada.setMonth(fechaSeleccionada.getMonth() + delta);
+            renderizarVista();
         }
 
         function irHoy() {
             fechaSeleccionada = new Date();
-            actualizarFechaMostrada();
-            renderizarEventosDelDia();
+            renderizarVista();
         }
 
         async function cargarEventos() {
             const res = await fetch(`${API}/usuarios/${MI_ID}/eventos`);
             todosLosEventos = await res.json();
-            renderizarEventosDelDia();
+            renderizarVista();
         }
 
-        function renderizarEventosDelDia() {
-            const contenedor = document.getElementById("lista-eventos-dia");
-            const eventosDelDia = todosLosEventos.filter(function(e) {
-                return mismoDia(new Date(e.hora_inicio), fechaSeleccionada);
-            }).sort(function(a, b) {
-                return new Date(a.hora_inicio) - new Date(b.hora_inicio);
-            });
+        function eventosDe(fecha) {
+            return todosLosEventos.filter(function(e) { return mismoDia(new Date(e.hora_inicio), fecha); })
+                .sort(function(a, b) { return new Date(a.hora_inicio) - new Date(b.hora_inicio); });
+        }
 
+        function renderizarVista() {
+            actualizarEtiquetaFecha();
+            if (vistaActual === "dia") renderizarDia();
+            else if (vistaActual === "semana") renderizarSemana();
+            else if (vistaActual === "mes") renderizarMes();
+        }
+
+        function actualizarEtiquetaFecha() {
+            const el = document.getElementById("fecha-actual");
+            if (vistaActual === "dia") {
+                el.innerText = fechaSeleccionada.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+            } else if (vistaActual === "semana") {
+                const inicio = inicioDeSemana(fechaSeleccionada);
+                const fin = new Date(inicio); fin.setDate(fin.getDate() + 6);
+                el.innerText = inicio.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) + " - " + fin.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+            } else {
+                el.innerText = fechaSeleccionada.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+            }
+        }
+
+        function renderizarDia() {
+            const contenedor = document.getElementById("vista-eventos");
+            const eventos = eventosDe(fechaSeleccionada);
             contenedor.innerHTML = "";
 
-            if (eventosDelDia.length === 0) {
+            if (eventos.length === 0) {
                 contenedor.innerHTML = '<div class="vacio">No tienes eventos este día</div>';
                 return;
             }
 
-            eventosDelDia.forEach(function(e) {
-                const inicio = new Date(e.hora_inicio);
-                const fin = new Date(e.hora_fin);
-                const horaTexto = inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) +
-                    " - " + fin.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
-                const div = document.createElement("div");
-                div.className = "evento-item";
-                div.innerHTML = `<div class="evento-hora">${inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
-                                  <div class="evento-titulo">${e.titulo}<br><span style="font-size:12px; color:#999; font-weight:400;">${horaTexto}</span></div>`;
-                contenedor.appendChild(div);
+            eventos.forEach(function(e) {
+                contenedor.appendChild(crearItemEvento(e));
             });
+        }
+
+        function crearItemEvento(e) {
+            const inicio = new Date(e.hora_inicio);
+            const fin = new Date(e.hora_fin);
+            const horaTexto = inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) +
+                " - " + fin.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            const div = document.createElement("div");
+            div.className = "evento-item";
+            div.innerHTML = `<div class="evento-hora">${inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
+                              <div class="evento-titulo">${e.titulo}<br><span style="font-size:12px; color:#999; font-weight:400;">${horaTexto}</span></div>`;
+            return div;
+        }
+
+        function renderizarSemana() {
+            const contenedor = document.getElementById("vista-eventos");
+            contenedor.innerHTML = "";
+            const inicio = inicioDeSemana(fechaSeleccionada);
+            const hoy = new Date();
+
+            for (let i = 0; i < 7; i++) {
+                const dia = new Date(inicio);
+                dia.setDate(dia.getDate() + i);
+                const eventos = eventosDe(dia);
+
+                const bloque = document.createElement("div");
+                bloque.className = "semana-dia";
+
+                const header = document.createElement("div");
+                header.className = "semana-dia-header" + (mismoDia(dia, hoy) ? " hoy" : "");
+                header.innerText = dia.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' });
+                bloque.appendChild(header);
+
+                if (eventos.length === 0) {
+                    const vacio = document.createElement("div");
+                    vacio.className = "vacio";
+                    vacio.style.textAlign = "left";
+                    vacio.style.padding = "0 0 4px 0";
+                    vacio.innerText = "Sin eventos";
+                    bloque.appendChild(vacio);
+                } else {
+                    eventos.forEach(function(e) { bloque.appendChild(crearItemEvento(e)); });
+                }
+
+                contenedor.appendChild(bloque);
+            }
+        }
+
+        function renderizarMes() {
+            const contenedor = document.getElementById("vista-eventos");
+            contenedor.innerHTML = "";
+
+            const anio = fechaSeleccionada.getFullYear();
+            const mes = fechaSeleccionada.getMonth();
+            const primerDiaMes = new Date(anio, mes, 1);
+            const inicioGrid = new Date(primerDiaMes);
+            inicioGrid.setDate(inicioGrid.getDate() - inicioGrid.getDay());
+            const hoy = new Date();
+
+            const grid = document.createElement("div");
+            grid.className = "mes-grid";
+
+            ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"].forEach(function(d) {
+                const cab = document.createElement("div");
+                cab.className = "mes-diasemana";
+                cab.innerText = d;
+                grid.appendChild(cab);
+            });
+
+            for (let i = 0; i < 42; i++) {
+                const dia = new Date(inicioGrid);
+                dia.setDate(dia.getDate() + i);
+                const eventos = eventosDe(dia);
+
+                const celda = document.createElement("div");
+                celda.className = "mes-celda";
+                if (dia.getMonth() !== mes) celda.classList.add("otro-mes");
+                if (mismoDia(dia, hoy)) celda.classList.add("hoy");
+
+                const num = document.createElement("div");
+                num.className = "mes-num";
+                num.innerText = dia.getDate();
+                celda.appendChild(num);
+
+                if (eventos.length > 0) {
+                    const punto = document.createElement("div");
+                    punto.className = "mes-punto";
+                    celda.appendChild(punto);
+                }
+
+                celda.onclick = function() {
+                    fechaSeleccionada = new Date(dia);
+                    cambiarVista("dia");
+                };
+
+                grid.appendChild(celda);
+            }
+
+            contenedor.appendChild(grid);
         }
 
         async function cargarEstadoMenu() {
@@ -450,12 +624,7 @@
             const solicitudes = await res.json();
             const contenedor = document.getElementById("lista-solicitudes");
             contenedor.innerHTML = "";
-
-            if (solicitudes.length === 0) {
-                contenedor.innerHTML = '<div class="vacio">Sin solicitudes</div>';
-                return;
-            }
-
+            if (solicitudes.length === 0) { contenedor.innerHTML = '<div class="vacio">Sin solicitudes</div>'; return; }
             solicitudes.forEach(function(s) {
                 const div = document.createElement("div");
                 div.className = "solicitud";
@@ -481,12 +650,7 @@
             const amigos = await res.json();
             const contenedor = document.getElementById("lista-amigos");
             contenedor.innerHTML = "";
-
-            if (amigos.length === 0) {
-                contenedor.innerHTML = '<div class="vacio">Sin amigos todavía</div>';
-                return;
-            }
-
+            if (amigos.length === 0) { contenedor.innerHTML = '<div class="vacio">Sin amigos todavía</div>'; return; }
             amigos.forEach(function(a) {
                 const div = document.createElement("div");
                 div.className = "amigo " + a.estado;
@@ -499,30 +663,20 @@
             const correo = document.getElementById("correo-amigo").value;
             const mensajeEl = document.getElementById("mensaje-amigo");
             mensajeEl.innerText = "";
-
             try {
                 const resBuscar = await fetch(`${API}/usuarios/buscar/${encodeURIComponent(correo)}`);
-                if (!resBuscar.ok) {
-                    mensajeEl.innerText = "No se encontró ese usuario";
-                    return;
-                }
+                if (!resBuscar.ok) { mensajeEl.innerText = "No se encontró ese usuario"; return; }
                 const amigo = await resBuscar.json();
-
                 const resSolicitud = await fetch(`${API}/amistades`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ usuario_id: MI_ID, amigo_id: amigo.id })
                 });
-
                 if (resSolicitud.ok) {
                     mensajeEl.innerText = "Solicitud enviada a " + amigo.nombre;
                     document.getElementById("correo-amigo").value = "";
-                } else {
-                    mensajeEl.innerText = "No se pudo enviar la solicitud";
-                }
-            } catch (e) {
-                mensajeEl.innerText = "Error al buscar el usuario";
-            }
+                } else { mensajeEl.innerText = "No se pudo enviar la solicitud"; }
+            } catch (e) { mensajeEl.innerText = "Error al buscar el usuario"; }
         }
 
         async function crearEvento() {
