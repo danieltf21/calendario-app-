@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -11,6 +11,8 @@ class Usuario(Base):
     nombre = Column(String, nullable=False)
     correo = Column(String, unique=True, nullable=False)
     contrasena = Column(String, nullable=False)
+    foto_perfil = Column(String, nullable=True)
+    mostrar_actividad = Column(Boolean, default=True)
 
     eventos = relationship("Evento", back_populates="usuario")
 
@@ -33,11 +35,7 @@ class Amistad(Base):
     id = Column(Integer, primary_key=True, index=True)
     usuario_id = Column(Integer, ForeignKey("usuarios.id"))
     amigo_id = Column(Integer, ForeignKey("usuarios.id"))
-    estado = Column(String, default="pendiente")  # pendiente / aceptado
+    estado = Column(String, default="pendiente")
 
-
-# Conexión a la base de datos (SQLite, un archivo local llamado calendario.db)
 engine = create_engine("sqlite:///./calendario.db")
-
-# Esto crea las tablas físicamente si no existen
 Base.metadata.create_all(bind=engine)

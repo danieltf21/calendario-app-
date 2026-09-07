@@ -34,6 +34,16 @@
 
         input:focus { outline: none; border-color: #6c5ce7; }
 
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 6px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fff;
+        }
+
         button {
             width: 100%;
             padding: 12px;
@@ -66,11 +76,7 @@
             z-index: 5;
         }
 
-        .topbar-fila1 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+        .topbar-fila1 { display: flex; align-items: center; justify-content: space-between; }
 
         #btn-menu {
             width: auto;
@@ -83,13 +89,7 @@
 
         #btn-menu:hover { background: #f0f0f0; }
 
-        .date-nav {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 14px;
-        }
+        .date-nav { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
 
         .date-nav button {
             width: auto;
@@ -104,12 +104,7 @@
 
         #btn-hoy { width: auto; font-size: 13px; padding: 6px 12px; margin: 0; }
 
-        .selector-vista {
-            display: flex;
-            background: #f0f0f0;
-            border-radius: 10px;
-            padding: 3px;
-        }
+        .selector-vista { display: flex; background: #f0f0f0; border-radius: 10px; padding: 3px; }
 
         .selector-vista button {
             flex: 1;
@@ -122,30 +117,13 @@
             border-radius: 8px;
         }
 
-        .selector-vista button.activo {
-            background: #fff;
-            color: #6c5ce7;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
+        .selector-vista button.activo { background: #fff; color: #6c5ce7; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
         #contenido { padding: 20px; }
 
-        .evento-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .evento-hora {
-            font-size: 13px;
-            font-weight: 600;
-            color: #6c5ce7;
-            min-width: 48px;
-        }
-
+        .evento-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .evento-hora { font-size: 13px; font-weight: 600; color: #6c5ce7; min-width: 48px; }
         .evento-titulo { font-size: 15px; font-weight: 500; }
-
         .vacio { color: #aaa; font-size: 14px; padding: 20px 0; text-align: center; }
 
         .card {
@@ -166,33 +144,12 @@
             margin: 0 0 12px 0;
         }
 
-        /* Vista semana */
         .semana-dia { margin-bottom: 18px; }
-
-        .semana-dia-header {
-            font-size: 13px;
-            font-weight: 700;
-            color: #6c5ce7;
-            margin-bottom: 8px;
-            text-transform: capitalize;
-        }
-
+        .semana-dia-header { font-size: 13px; font-weight: 700; color: #6c5ce7; margin-bottom: 8px; text-transform: capitalize; }
         .semana-dia-header.hoy { color: #b3261e; }
 
-        /* Vista mes */
-        .mes-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-
-        .mes-diasemana {
-            text-align: center;
-            font-size: 11px;
-            font-weight: 600;
-            color: #999;
-            padding-bottom: 6px;
-        }
+        .mes-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .mes-diasemana { text-align: center; font-size: 11px; font-weight: 600; color: #999; padding-bottom: 6px; }
 
         .mes-celda {
             aspect-ratio: 1;
@@ -210,18 +167,9 @@
         .mes-celda:hover { background: #f7f5fe; }
         .mes-celda.otro-mes { opacity: 0.35; }
         .mes-celda.hoy { border-color: #6c5ce7; border-width: 2px; }
-
         .mes-num { font-weight: 600; }
+        .mes-punto { width: 6px; height: 6px; border-radius: 50%; background: #6c5ce7; margin-top: 4px; }
 
-        .mes-punto {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #6c5ce7;
-            margin-top: 4px;
-        }
-
-        /* Menú lateral */
         #overlay {
             display: none;
             position: fixed;
@@ -246,6 +194,73 @@
 
         #menu-lateral.abierto { right: 0; }
 
+        .perfil-header { text-align: center; margin-bottom: 8px; }
+
+        .avatar-wrap {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 8px auto;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ccc;
+            display: block;
+            background: #ddd;
+        }
+
+        .avatar-inicial {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 4px solid #ccc;
+            background: #6c5ce7;
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar.libre, .avatar-inicial.libre { border-color: #2ecc71; }
+        .avatar.ocupado, .avatar-inicial.ocupado { border-color: #e74c3c; }
+
+        .avatar-editar {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: #6c5ce7;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid #fff;
+        }
+
+        #nombre-perfil { font-weight: 700; font-size: 16px; }
+        #texto-estado-menu { font-size: 13px; color: #666; margin-top: 2px; }
+
+        .toggle-privacidad {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #444;
+            margin-top: 14px;
+        }
+
+        .toggle-privacidad input { width: auto; margin: 0; }
+
         .menu-item {
             text-align: left;
             background: none;
@@ -257,36 +272,47 @@
 
         .menu-item:hover, .menu-item.activo { background: #f0edfe; color: #6c5ce7; }
 
-        .seccion-menu {
-            display: none;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #eee;
-        }
-
+        .seccion-menu { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee; }
         .seccion-menu.visible { display: block; }
-
-        #mi-estado-menu {
-            font-size: 17px;
-            font-weight: 600;
-            padding: 12px;
-            background: #f7f7f7;
-            border-radius: 10px;
-        }
 
         .amigo {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px 12px;
+            gap: 10px;
+            padding: 8px 10px;
             margin: 6px 0;
             border-radius: 10px;
             font-size: 13px;
             font-weight: 500;
+            background: #f7f7f7;
         }
 
-        .libre { background: #eafaf1; color: #1e7e4f; }
-        .ocupado { background: #fdecec; color: #b3261e; }
+        .avatar-mini {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ccc;
+            flex-shrink: 0;
+        }
+
+        .avatar-mini-inicial {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid #ccc;
+            background: #6c5ce7;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .avatar-mini.libre, .avatar-mini-inicial.libre { border-color: #2ecc71; }
+        .avatar-mini.ocupado, .avatar-mini-inicial.ocupado { border-color: #e74c3c; }
 
         .solicitud {
             display: flex;
@@ -301,6 +327,18 @@
 
         .solicitud button { width: auto; padding: 5px 12px; font-size: 12px; margin: 0; }
         #mensaje-amigo { font-size: 12px; color: #666; margin-top: 4px; }
+
+        .checkbox-recurrente {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-recurrente input { width: auto; margin: 0; }
+
+        #campos-recurrente { display: none; }
     </style>
 </head>
 <body>
@@ -336,26 +374,59 @@
 
             <div class="card">
                 <h2>Nuevo evento</h2>
-                <input id="titulo" placeholder="Título (ej. Clase de morfología)">
-                <input id="hora_inicio" type="datetime-local">
-                <input id="hora_fin" type="datetime-local">
-                <button onclick="crearEvento()">Guardar evento</button>
+
+                <div class="checkbox-recurrente">
+                    <input type="checkbox" id="es-recurrente" onchange="toggleRecurrente()">
+                    <label for="es-recurrente">Este evento se repite semanalmente</label>
+                </div>
+
+                <div id="campos-simple">
+                    <input id="titulo" placeholder="Título (ej. Clase de morfología)">
+                    <input id="hora_inicio" type="datetime-local">
+                    <input id="hora_fin" type="datetime-local">
+                </div>
+
+                <div id="campos-recurrente">
+                    <input id="titulo-r" placeholder="Título (ej. Clase de morfología)">
+                    <select id="dia-semana-r">
+                        <option value="0">Lunes</option>
+                        <option value="1">Martes</option>
+                        <option value="2">Miércoles</option>
+                        <option value="3">Jueves</option>
+                        <option value="4">Viernes</option>
+                        <option value="5">Sábado</option>
+                        <option value="6">Domingo</option>
+                    </select>
+                    <input id="hora-inicio-r" type="time">
+                    <input id="hora-fin-r" type="time">
+                    <input id="fecha-inicio-r" type="date">
+                    <input id="fecha-fin-r" type="date">
+                </div>
+
+                <button onclick="guardarEvento()">Guardar evento</button>
             </div>
         </div>
     </div>
 
     <div id="overlay" onclick="toggleMenu()"></div>
     <div id="menu-lateral">
-        <div id="saludo-menu" style="font-size:18px; font-weight:700; margin-bottom:16px;"></div>
+        <div class="perfil-header">
+            <div class="avatar-wrap" onclick="document.getElementById('input-foto').click()">
+                <div id="avatar-contenedor"></div>
+                <div class="avatar-editar">✎</div>
+            </div>
+            <input type="file" id="input-foto" accept="image/*" style="display:none" onchange="subirFoto(event)">
+            <div id="nombre-perfil"></div>
+            <div id="texto-estado-menu">Cargando...</div>
+            <div class="toggle-privacidad">
+                <input type="checkbox" id="chk-privacidad" onchange="actualizarPrivacidad()">
+                <label for="chk-privacidad">Mostrar mi actividad a mis amigos</label>
+            </div>
+        </div>
 
-        <button class="menu-item" onclick="mostrarSeccion('estado')">🟢 Estado</button>
         <button class="menu-item" onclick="mostrarSeccion('amigos')">👥 Amigos</button>
         <button class="menu-item" onclick="mostrarSeccion('agregar')">➕ Agregar amigo</button>
         <button class="menu-item" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
-
-        <div id="seccion-estado" class="seccion-menu">
-            <div id="mi-estado-menu">Cargando...</div>
-        </div>
 
         <div id="seccion-amigos" class="seccion-menu">
             <div style="font-size:13px; font-weight:600; color:#888; text-transform:uppercase; margin-bottom:8px;">Solicitudes pendientes</div>
@@ -375,6 +446,9 @@
         const API = "https://calendario-app-cqtm.onrender.com";
         let MI_ID = null;
         let MI_NOMBRE = null;
+        let MI_FOTO = null;
+        let MI_MOSTRAR_ACTIVIDAD = true;
+        let MI_ESTADO_ACTUAL = "libre";
         let fechaSeleccionada = new Date();
         let vistaActual = "dia";
         let todosLosEventos = [];
@@ -386,22 +460,19 @@
             errorEl.innerText = "";
 
             try {
-                const res = await fetch(`${API}/login?correo=${encodeURIComponent(correo)}&contrasena=${encodeURIComponent(contrasena)}`, {
-                    method: "POST"
-                });
-
-                if (!res.ok) {
-                    errorEl.innerText = "Correo o contraseña incorrectos";
-                    return;
-                }
+                const res = await fetch(`${API}/login?correo=${encodeURIComponent(correo)}&contrasena=${encodeURIComponent(contrasena)}`, { method: "POST" });
+                if (!res.ok) { errorEl.innerText = "Correo o contraseña incorrectos"; return; }
 
                 const data = await res.json();
                 MI_ID = data.usuario_id;
                 MI_NOMBRE = data.nombre;
+                MI_FOTO = data.foto_perfil;
+                MI_MOSTRAR_ACTIVIDAD = data.mostrar_actividad;
 
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("app").style.display = "block";
-                document.getElementById("saludo-menu").innerText = "Hola, " + MI_NOMBRE;
+                document.getElementById("nombre-perfil").innerText = MI_NOMBRE;
+                document.getElementById("chk-privacidad").checked = MI_MOSTRAR_ACTIVIDAD;
 
                 cargarEventos();
                 cargarEstadoMenu();
@@ -414,7 +485,6 @@
 
         function cerrarSesion() {
             MI_ID = null;
-            MI_NOMBRE = null;
             document.getElementById("app").style.display = "none";
             document.getElementById("login-screen").style.display = "block";
             document.getElementById("login-correo").value = "";
@@ -435,6 +505,50 @@
             document.querySelectorAll(".menu-item").forEach(function(b) { b.classList.remove("activo"); });
             document.getElementById("seccion-" + nombre).classList.add("visible");
             event.currentTarget.classList.add("activo");
+        }
+
+        function renderizarAvatarPropio() {
+            const cont = document.getElementById("avatar-contenedor");
+            cont.innerHTML = "";
+            if (MI_FOTO) {
+                const img = document.createElement("img");
+                img.className = "avatar " + MI_ESTADO_ACTUAL;
+                img.src = MI_FOTO;
+                cont.appendChild(img);
+            } else {
+                const div = document.createElement("div");
+                div.className = "avatar-inicial " + MI_ESTADO_ACTUAL;
+                div.innerText = MI_NOMBRE ? MI_NOMBRE.charAt(0).toUpperCase() : "?";
+                cont.appendChild(div);
+            }
+        }
+
+        async function subirFoto(event) {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.onload = async function() {
+                const base64 = lector.result;
+                await fetch(`${API}/usuarios/${MI_ID}/foto`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ foto_base64: base64 })
+                });
+                MI_FOTO = base64;
+                renderizarAvatarPropio();
+            };
+            lector.readAsDataURL(archivo);
+        }
+
+        async function actualizarPrivacidad() {
+            const nuevoValor = document.getElementById("chk-privacidad").checked;
+            await fetch(`${API}/usuarios/${MI_ID}/privacidad`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mostrar_actividad: nuevoValor })
+            });
+            MI_MOSTRAR_ACTIVIDAD = nuevoValor;
         }
 
         function mismoDia(a, b) {
@@ -465,6 +579,12 @@
         function irHoy() {
             fechaSeleccionada = new Date();
             renderizarVista();
+        }
+
+        function toggleRecurrente() {
+            const marcado = document.getElementById("es-recurrente").checked;
+            document.getElementById("campos-simple").style.display = marcado ? "none" : "block";
+            document.getElementById("campos-recurrente").style.display = marcado ? "block" : "none";
         }
 
         async function cargarEventos() {
@@ -502,15 +622,8 @@
             const contenedor = document.getElementById("vista-eventos");
             const eventos = eventosDe(fechaSeleccionada);
             contenedor.innerHTML = "";
-
-            if (eventos.length === 0) {
-                contenedor.innerHTML = '<div class="vacio">No tienes eventos este día</div>';
-                return;
-            }
-
-            eventos.forEach(function(e) {
-                contenedor.appendChild(crearItemEvento(e));
-            });
+            if (eventos.length === 0) { contenedor.innerHTML = '<div class="vacio">No tienes eventos este día</div>'; return; }
+            eventos.forEach(function(e) { contenedor.appendChild(crearItemEvento(e)); });
         }
 
         function crearItemEvento(e) {
@@ -554,7 +667,6 @@
                 } else {
                     eventos.forEach(function(e) { bloque.appendChild(crearItemEvento(e)); });
                 }
-
                 contenedor.appendChild(bloque);
             }
         }
@@ -562,7 +674,6 @@
         function renderizarMes() {
             const contenedor = document.getElementById("vista-eventos");
             contenedor.innerHTML = "";
-
             const anio = fechaSeleccionada.getFullYear();
             const mes = fechaSeleccionada.getMonth();
             const primerDiaMes = new Date(anio, mes, 1);
@@ -608,15 +719,16 @@
 
                 grid.appendChild(celda);
             }
-
             contenedor.appendChild(grid);
         }
 
         async function cargarEstadoMenu() {
             const res = await fetch(`${API}/usuarios/${MI_ID}/estado`);
             const data = await res.json();
-            const el = document.getElementById("mi-estado-menu");
-            el.innerText = data.estado === "ocupado" ? ("🔴 Ocupado: " + data.actividad) : "🟢 Libre";
+            MI_ESTADO_ACTUAL = data.estado;
+            document.getElementById("texto-estado-menu").innerText =
+                data.estado === "ocupado" ? ("🔴 Ocupado: " + data.actividad) : "🟢 Libre";
+            renderizarAvatarPropio();
         }
 
         async function cargarSolicitudes() {
@@ -651,10 +763,23 @@
             const contenedor = document.getElementById("lista-amigos");
             contenedor.innerHTML = "";
             if (amigos.length === 0) { contenedor.innerHTML = '<div class="vacio">Sin amigos todavía</div>'; return; }
+
             amigos.forEach(function(a) {
                 const div = document.createElement("div");
-                div.className = "amigo " + a.estado;
-                div.innerText = a.estado === "ocupado" ? (a.nombre + " — Ocupado") : (a.nombre + " — Libre");
+                div.className = "amigo";
+
+                let avatarHtml;
+                if (a.foto_perfil) {
+                    avatarHtml = `<img class="avatar-mini ${a.estado}" src="${a.foto_perfil}">`;
+                } else {
+                    avatarHtml = `<div class="avatar-mini-inicial ${a.estado}">${a.nombre.charAt(0).toUpperCase()}</div>`;
+                }
+
+                const texto = a.estado === "ocupado"
+                    ? (a.actividad ? (a.nombre + " — Ocupado: " + a.actividad) : (a.nombre + " — Ocupado"))
+                    : (a.nombre + " — Libre");
+
+                div.innerHTML = avatarHtml + `<span>${texto}</span>`;
                 contenedor.appendChild(div);
             });
         }
@@ -679,20 +804,47 @@
             } catch (e) { mensajeEl.innerText = "Error al buscar el usuario"; }
         }
 
-        async function crearEvento() {
-            const titulo = document.getElementById("titulo").value;
-            const hora_inicio = document.getElementById("hora_inicio").value;
-            const hora_fin = document.getElementById("hora_fin").value;
+        async function guardarEvento() {
+            const esRecurrente = document.getElementById("es-recurrente").checked;
 
-            await fetch(`${API}/eventos`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ usuario_id: MI_ID, titulo: titulo, hora_inicio: hora_inicio, hora_fin: hora_fin })
-            });
+            if (!esRecurrente) {
+                const titulo = document.getElementById("titulo").value;
+                const hora_inicio = document.getElementById("hora_inicio").value;
+                const hora_fin = document.getElementById("hora_fin").value;
 
-            document.getElementById("titulo").value = "";
-            document.getElementById("hora_inicio").value = "";
-            document.getElementById("hora_fin").value = "";
+                await fetch(`${API}/eventos`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario_id: MI_ID, titulo: titulo, hora_inicio: hora_inicio, hora_fin: hora_fin })
+                });
+
+                document.getElementById("titulo").value = "";
+                document.getElementById("hora_inicio").value = "";
+                document.getElementById("hora_fin").value = "";
+            } else {
+                const titulo = document.getElementById("titulo-r").value;
+                const dia_semana = parseInt(document.getElementById("dia-semana-r").value);
+                const hora_inicio = document.getElementById("hora-inicio-r").value;
+                const hora_fin = document.getElementById("hora-fin-r").value;
+                const fecha_inicio = document.getElementById("fecha-inicio-r").value;
+                const fecha_fin = document.getElementById("fecha-fin-r").value;
+
+                await fetch(`${API}/eventos/recurrente`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        usuario_id: MI_ID, titulo: titulo, dia_semana: dia_semana,
+                        hora_inicio: hora_inicio, hora_fin: hora_fin,
+                        fecha_inicio: fecha_inicio, fecha_fin: fecha_fin
+                    })
+                });
+
+                document.getElementById("titulo-r").value = "";
+                document.getElementById("hora-inicio-r").value = "";
+                document.getElementById("hora-fin-r").value = "";
+                document.getElementById("fecha-inicio-r").value = "";
+                document.getElementById("fecha-fin-r").value = "";
+            }
 
             cargarEventos();
             cargarEstadoMenu();
