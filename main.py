@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from models import Base, Usuario, Evento, Amistad
 from schemas import (
@@ -41,7 +43,7 @@ def get_db():
 
 @app.get("/")
 def read_root():
-    return {"mensaje": "¡Hola, mi app de calendario está funcionando!"}
+    return FileResponse("index.html")
 
 
 @app.post("/usuarios", response_model=UsuarioRespuesta)
